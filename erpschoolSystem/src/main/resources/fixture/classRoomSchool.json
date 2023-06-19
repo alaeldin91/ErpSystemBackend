@@ -1,0 +1,75 @@
+[
+
+  {
+    "id": 1,
+    "name": "First Class The Primary class",
+    "classId": "A1"
+   },
+
+   {
+    "id": 2,
+     "name": "Second Class The Primary class",
+     "classId": "A2"
+},
+  {
+    "id": 3,
+    "name": "third Class The Primary School",
+    "classId":"A3"
+   },
+  {
+    "id": 4,
+    "name": "fourth Class The Primary School",
+    "classId":"A4"
+
+  },
+  {
+    "id": 5,
+    "name": "Fifth Class The Primary School",
+    "classId":"A5"
+
+  },
+  {
+    "id": 6,
+    "name": "sixth Class The Primary School",
+    "classId":"A6"
+
+  },
+  {
+    "id": 7,
+    "name": "first Class The Middle School",
+    "classId":"M1"
+
+  },
+  {
+    "id": 8,
+    "name": "second Class The Middle School",
+    "classId":"M2"
+
+  },
+
+  {
+    "id": 9,
+    "name": "Third Class The Middle School",
+    "classId":"M3"
+
+  },
+  {
+    "id": 10,
+    "name": "first Class The Secondary School",
+    "classId":"S1"
+
+  },
+  {
+    "id": 11,
+    "name": "Second Class The Secondary School",
+    "classId":"S2"
+
+  },
+
+  {
+    "id": 12,
+    "name": "Third Class The Secondary School",
+    "classId":"S3"
+
+  }
+]

@@ -50,10 +50,13 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isPresent()) {
             throw new EmailAlreadyExistsException("Email is Already Exist");
         }
-        List<Role> roles = roleRepository.findAll();
+
+        Set<Role> roles = userRegisterRequestDto.getRoles();
+        List<Role> roleList = new ArrayList<>(roles);
+
         Role role = null  ;
-        for(int i=0;i<roles.size();i++){
-            role = roles.get(i);
+        for(int i=0;i<roleList.size();i++){
+            role = roleList.get(i);
         }
         Set<Role> roleSet = new HashSet<>();
 
@@ -67,7 +70,7 @@ public class UserServiceImpl implements UserService {
         User userSave = userRepository.save(user);
         var token = jwtService.generateToken(user, role);
 
-        return UserResponseDto.builder().token(token).lastName(userSave.getLastName()).firstName(userSave.getFirstName()).email(userSave.getEmail()).build();
+        return UserResponseDto.builder().token(token).lastName(userSave.getLastName()).firstName(userSave.getFirstName()).email(userSave.getEmail()).role(roleSet).build();
     }
 
     @Override
@@ -89,7 +92,8 @@ public class UserServiceImpl implements UserService {
         var token = jwtService.generateToken(user, role);
         System.out.println("*******_Token:"+token);
         assert role != null;
-        return UserResponseDto.builder().firstName(user.getFirstName()).lastName(user.getLastName())
+        return UserResponseDto.builder().firstName(user.getFirstName()).lastName(user.getLastName()).role(user.getRoles())
+                .id(user.getId())
                 .email(user.getEmail()).token(token).build();
     }
 

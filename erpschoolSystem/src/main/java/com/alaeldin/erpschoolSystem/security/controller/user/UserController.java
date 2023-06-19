@@ -38,7 +38,7 @@ private final UserServiceImpl userService;
 
     @PostMapping
     public ResponseEntity<UserResponseDto>register(@RequestBody UserRegisterRequestDto requestDto){
-    return  ResponseEntity.ok(userService.register(requestDto));
+       return  ResponseEntity.ok(userService.register(requestDto));
 }
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto>login(@RequestBody UserLoginRequest requestDto){

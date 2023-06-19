@@ -1,8 +1,21 @@
 package com.alaeldin.erpschoolSystem;
 
+import com.alaeldin.erpschoolSystem.classroom.dto.ClassRoomDto;
+import com.alaeldin.erpschoolSystem.classroom.entity.ClassRoom;
+import com.alaeldin.erpschoolSystem.classroom.mapper.ClassMapper;
+import com.alaeldin.erpschoolSystem.classroom.serviceimpl.ClassRoomServiceImpl;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Bean;
+
+import java.io.InputStream;
+import java.util.List;
 
 @SpringBootApplication
 
@@ -12,4 +25,28 @@ public class ErpschoolSystemApplication {
 		SpringApplication.run(ErpschoolSystemApplication.class, args);
 	}
 
+
+	/**Runner Class Room **/
+
+	@Bean
+	CommandLineRunner runnerClassRoom(ClassRoomServiceImpl classRoomServiceImpl){
+		Logger LOGGER = LoggerFactory.getLogger(ErpschoolSystemApplication.class);
+		return args -> {
+			ObjectMapper objectMapper = new ObjectMapper();
+			TypeReference<List<ClassRoom>> typeReference = new TypeReference<>(){};
+			InputStream inputStream = TypeReference.class.getResourceAsStream("/fixture/classRoomSchool.json");
+
+			try{
+				List<ClassRoom> classRoomList = objectMapper.readValue(inputStream,typeReference);
+				List<ClassRoomDto> classRoomDtoList  = classRoomList.stream().map(ClassMapper::toClassRoomDto).toList();
+				LOGGER.info("THIS IS CLASS rOOM "+"  "+classRoomDtoList);
+				classRoomServiceImpl.SaveAllClassRoom(classRoomDtoList);
+
+			}
+			catch(IOException e){
+				System.out.println("Unable to save Class Room: " + e.getMessage());
+
+			}
+		};
+	}
 }
