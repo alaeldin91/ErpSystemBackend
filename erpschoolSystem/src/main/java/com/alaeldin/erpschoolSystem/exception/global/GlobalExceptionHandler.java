@@ -25,9 +25,9 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleResourceNotFound(ResourceNotFoundException exception
-            , WebRequest webRequest) {
+            , WebRequest webRequest,Object object) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), exception.getMessage()
-                , webRequest.getDescription(false), " User Not Found");
+                , webRequest.getDescription(false), object.toString());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
