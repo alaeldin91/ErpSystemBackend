@@ -1,0 +1,16 @@
+[
+
+  {
+    "id": 1,
+    "name": "Primary School"
+  },
+
+  {
+    "id": 2,
+    "name": "Middle School"
+  },
+  {
+    "id": 3,
+    "name": "Secondary School"
+  }
+  ]
