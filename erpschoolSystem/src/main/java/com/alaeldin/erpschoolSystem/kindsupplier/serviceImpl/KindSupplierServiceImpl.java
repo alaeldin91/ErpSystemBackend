@@ -1,17 +1,15 @@
-package com.alaeldin.erpschoolSystem.supplier.serviceImpl;
+package com.alaeldin.erpschoolSystem.kindsupplier.serviceImpl;
 
 import com.alaeldin.erpschoolSystem.exception.resourcenotfound.ResourceNotFoundException;
-import com.alaeldin.erpschoolSystem.supplier.dto.KindSupplierDto;
-import com.alaeldin.erpschoolSystem.supplier.entity.KindSupplier;
-import com.alaeldin.erpschoolSystem.supplier.mapper.KindSupplierMapper;
-import com.alaeldin.erpschoolSystem.supplier.repository.KindSupplierRepository;
-import com.alaeldin.erpschoolSystem.supplier.service.KindSupplierService;
+import com.alaeldin.erpschoolSystem.kindsupplier.dto.KindSupplierDto;
+import com.alaeldin.erpschoolSystem.kindsupplier.entity.KindSupplier;
+import com.alaeldin.erpschoolSystem.kindsupplier.mapper.KindSupplierMapper;
+import com.alaeldin.erpschoolSystem.kindsupplier.repository.KindSupplierRepository;
+import com.alaeldin.erpschoolSystem.kindsupplier.service.KindSupplierService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor

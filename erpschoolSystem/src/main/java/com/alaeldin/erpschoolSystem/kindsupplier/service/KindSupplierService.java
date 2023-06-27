@@ -1,11 +1,9 @@
-package com.alaeldin.erpschoolSystem.supplier.service;
+package com.alaeldin.erpschoolSystem.kindsupplier.service;
 
 
-import com.alaeldin.erpschoolSystem.supplier.dto.KindSupplierDto;
-import org.springframework.stereotype.Service;
+import com.alaeldin.erpschoolSystem.kindsupplier.dto.KindSupplierDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface KindSupplierService {
     /**  Method Save Kind Supplier   **/

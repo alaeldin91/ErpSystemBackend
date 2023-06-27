@@ -1,7 +1,9 @@
-package com.alaeldin.erpschoolSystem.supplier.controller;
+package com.alaeldin.erpschoolSystem.kindsupplier.controller;
 
-import com.alaeldin.erpschoolSystem.supplier.dto.KindSupplierDto;
-import com.alaeldin.erpschoolSystem.supplier.serviceImpl.KindSupplierServiceImpl;
+import com.alaeldin.erpschoolSystem.kindsupplier.dto.KindSupplierDto;
+import com.alaeldin.erpschoolSystem.kindsupplier.serviceImpl.KindSupplierServiceImpl;
+import com.alaeldin.erpschoolSystem.supplier.dto.SupplierDto;
+import com.alaeldin.erpschoolSystem.supplier.entity.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +38,19 @@ public class KindSupplierController {
     public ResponseEntity<KindSupplierDto> getKindSupplierByName(@PathVariable("name") String name){
         KindSupplierDto kindSupplierDto = kindSupplierService.getSupplierKindByName(name);
         return new ResponseEntity<>(kindSupplierDto,HttpStatus.OK);
+    }
+
+    @PostMapping("update/kindsupplier/{id}")
+    public ResponseEntity<KindSupplierDto> updateSupplier(@PathVariable("id") long id,
+                                                          @RequestBody KindSupplierDto kindSupplierDto){
+        kindSupplierDto.setId(id);
+        KindSupplierDto updateKindSupplierDto = kindSupplierService.updateKindSupplier(kindSupplierDto);
+      return new ResponseEntity<>(updateKindSupplierDto,HttpStatus.OK);
+
+    }
+    @GetMapping("delete/kindsupplier/{id}")
+    public ResponseEntity<String> deleteSupplier(@PathVariable long id){
+        kindSupplierService.deleteSupplierKind(id);
+        return new ResponseEntity<>("Supplier kind is successfully Delete",HttpStatus.OK);
     }
 }

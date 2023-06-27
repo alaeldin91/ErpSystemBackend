@@ -1,8 +1,7 @@
-package com.alaeldin.erpschoolSystem.supplier.repository;
+package com.alaeldin.erpschoolSystem.kindsupplier.repository;
 
 
-import com.alaeldin.erpschoolSystem.supplier.dto.KindSupplierDto;
-import com.alaeldin.erpschoolSystem.supplier.entity.KindSupplier;
+import com.alaeldin.erpschoolSystem.kindsupplier.entity.KindSupplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.RestController;
 
