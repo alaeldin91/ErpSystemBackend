@@ -1,6 +1,8 @@
 package com.alaeldin.erpschoolSystem.classroom.service;
 
 import com.alaeldin.erpschoolSystem.classroom.dto.ClassRoomDto;
+import com.alaeldin.erpschoolSystem.classroom.entity.ClassRoom;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -9,9 +11,10 @@ public interface ClassRoomService {
 
     Iterable<ClassRoomDto> SaveAllClassRoom(List<ClassRoomDto> listClassRoomDto);
    /** get All Class Room **/
-  List<ClassRoomDto> getClassRoom();
 
-  /** get Class Room By Name **/
+    Page<ClassRoomDto> getClassRoom(int pageNumber, int pageSize);
+
+    /** get Class Room By Name **/
   ClassRoomDto getClassRoomByName(String NameClassRoom);
 
   /**get Class Room By Id **/

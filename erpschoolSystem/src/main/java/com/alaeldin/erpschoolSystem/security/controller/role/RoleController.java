@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/auth/admin/roles")
+@RequestMapping("api/v1/auth/roles")
 public class RoleController {
     Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
@@ -34,11 +35,16 @@ public class RoleController {
         return new ResponseEntity<>(roleDto, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<RoleDto>> getAllRoles() {
-        List<RoleDto> rolesDto = roleService.getAllRole();
+    @GetMapping(params = { "page", "size"})
+    public ResponseEntity<Page<RoleDto>> getAllRoles(@RequestParam("page") int pageNumber,@RequestParam("size") int pageSize) {
+        Page<RoleDto> rolesDto = roleService.getAllRole(pageNumber,pageSize);
         return new ResponseEntity<>(rolesDto, HttpStatus.OK);
     }
+     @GetMapping(value = "/getrolelist")
+     public ResponseEntity<List<RoleDto>> getRoleList(){
+         List<RoleDto> roleDtoList = roleService.getRoleList();
+         return  new ResponseEntity<>(roleDtoList,HttpStatus.OK);
+     }
 
     @PostMapping("/update/{id}")
     public ResponseEntity<RoleDto> updateRole(@PathVariable("id") Integer roleId, @RequestBody @Valid RoleDto role) {

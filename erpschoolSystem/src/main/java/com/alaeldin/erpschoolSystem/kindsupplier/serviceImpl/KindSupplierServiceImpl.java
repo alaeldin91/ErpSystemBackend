@@ -1,5 +1,6 @@
 package com.alaeldin.erpschoolSystem.kindsupplier.serviceImpl;
 
+import com.alaeldin.erpschoolSystem.exception.existdata.EmailAlreadyExistsException;
 import com.alaeldin.erpschoolSystem.exception.resourcenotfound.ResourceNotFoundException;
 import com.alaeldin.erpschoolSystem.kindsupplier.dto.KindSupplierDto;
 import com.alaeldin.erpschoolSystem.kindsupplier.entity.KindSupplier;
@@ -7,9 +8,13 @@ import com.alaeldin.erpschoolSystem.kindsupplier.mapper.KindSupplierMapper;
 import com.alaeldin.erpschoolSystem.kindsupplier.repository.KindSupplierRepository;
 import com.alaeldin.erpschoolSystem.kindsupplier.service.KindSupplierService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,11 +23,15 @@ public class KindSupplierServiceImpl implements KindSupplierService {
 
     @Override
     public KindSupplierDto saveKindSupplier(KindSupplierDto kindSupplierDto) {
+        Optional<KindSupplier>kindSupplierOptional = kindSupplierRepository.findByKindName(kindSupplierDto.getKindName());
+        if (kindSupplierOptional.isPresent()){
+           new EmailAlreadyExistsException("your kind Supplier is Already Exist");
+        }
         KindSupplier kindSupplier = KindSupplierMapper.toKindSupplier(kindSupplierDto);
             kindSupplierRepository.save(kindSupplier);
             KindSupplierDto kindSupplierSaveDto =
                     KindSupplierMapper.tokindSupplierDto(kindSupplier);
-        return kindSupplierDto;
+        return kindSupplierSaveDto;
     }
 
     @Override
@@ -39,10 +48,19 @@ public class KindSupplierServiceImpl implements KindSupplierService {
     }
 
     @Override
-    public List<KindSupplierDto> getSupplierKinds() {
-        List<KindSupplier> listKindSuppliers = kindSupplierRepository.findAll();
-        List<KindSupplierDto> kindSupplierDtoList = listKindSuppliers.stream().map(kindSupplier ->
-                KindSupplierMapper.tokindSupplierDto(kindSupplier)).toList();
+    public Page<KindSupplierDto> getSupplierKinds(int pageNumber,int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Page<KindSupplier> listKindSuppliers = kindSupplierRepository.findAll(pageable);
+        Page<KindSupplierDto> kindSupplierDtoList = listKindSuppliers.map(kindSupplier ->
+                KindSupplierMapper.tokindSupplierDto(kindSupplier));
+        return kindSupplierDtoList;
+    }
+
+    @Override
+    public List<KindSupplierDto> getSupplierList() {
+        List<KindSupplier> supplierList = kindSupplierRepository.findAll();
+        List<KindSupplierDto>kindSupplierDtoList = supplierList.stream().map(supplier->
+                KindSupplierMapper.tokindSupplierDto(supplier)).toList();
         return kindSupplierDtoList;
     }
 
@@ -55,7 +73,7 @@ public class KindSupplierServiceImpl implements KindSupplierService {
 
     @Override
     public KindSupplierDto getSupplierKindByName(String supplierKindName) {
-        KindSupplier kindSupplier = kindSupplierRepository.findByKindName(supplierKindName);
+        KindSupplier kindSupplier = kindSupplierRepository.findByKindName(supplierKindName).orElseThrow();
         KindSupplierDto kindSupplierDto = KindSupplierMapper.tokindSupplierDto(kindSupplier);
         return kindSupplierDto;
     }

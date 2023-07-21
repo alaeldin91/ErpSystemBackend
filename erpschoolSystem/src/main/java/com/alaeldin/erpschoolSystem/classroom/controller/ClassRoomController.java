@@ -1,12 +1,14 @@
 package com.alaeldin.erpschoolSystem.classroom.controller;
 
 import com.alaeldin.erpschoolSystem.classroom.dto.ClassRoomDto;
+import com.alaeldin.erpschoolSystem.classroom.entity.ClassRoom;
 import com.alaeldin.erpschoolSystem.classroom.serviceimpl.ClassRoomServiceImpl;
 import com.alaeldin.erpschoolSystem.security.serviceimpl.user.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +17,13 @@ import java.util.List;
 
 @RestController()
 @RequiredArgsConstructor
-@RequestMapping("api/v1/auth/admin/class")
+@RequestMapping("api/v1/auth/class")
 public class ClassRoomController {
-    Logger logger = LogManager.getLogger(UserServiceImpl.class);
    private final ClassRoomServiceImpl classRoomService;
 
-    @GetMapping
-    public ResponseEntity<List<ClassRoomDto>> getAllClassRoom(){
-        List<ClassRoomDto> classRoomDtoList = classRoomService.getClassRoom();
+    @GetMapping(params = { "page", "size"})
+    public ResponseEntity<Page<ClassRoomDto>> getAllClassRoom(@RequestParam("page") int page, @RequestParam("size") int size){
+        Page<ClassRoomDto> classRoomDtoList = classRoomService.getClassRoom(page,size);
         return  new ResponseEntity<>(classRoomDtoList, HttpStatus.OK);
 
    }

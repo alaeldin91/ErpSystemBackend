@@ -10,7 +10,9 @@ import com.alaeldin.erpschoolSystem.security.service.role.RoleService;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,13 +25,19 @@ public class RoleServiceImpl implements RoleService {
    private final Logger logger = LogManager.getLogger(RoleServiceImpl.class);
 
    @Override
-    public List<RoleDto> getAllRole() {
-       List<Role> roles = roleRepository.findAll();
+    public Page<RoleDto> getAllRole( int pageNumber,int pageSize) {
+       Pageable pageable = PageRequest.of(pageNumber, pageSize);
+       Page<Role> roles = roleRepository.findAll(pageable);
+       Page<RoleDto> roleDtoList = roles.map(role -> RoleMapper.mapToRoleDto(role));
 
-       PageRequest pageRequest = PageRequest.of(0,roles.size());
+       return roleDtoList;
 
-      List<RoleDto> roleDtoList =  roles.stream().map(role->RoleMapper.mapToRoleDto(role)).toList();
-        return roleDtoList;
+   }
+
+    @Override
+    public List<RoleDto> getRoleList() {
+        List<Role> roleList = roleRepository.findAll();
+        return roleList.stream().map(RoleMapper::mapToRoleDto).toList();
     }
 
     @Override

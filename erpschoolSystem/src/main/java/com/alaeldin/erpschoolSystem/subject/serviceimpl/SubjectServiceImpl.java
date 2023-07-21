@@ -9,6 +9,9 @@ import com.alaeldin.erpschoolSystem.subject.repository.RepositorySubject;
 import com.alaeldin.erpschoolSystem.subject.service.SubjectService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,9 +31,10 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<SubjectDto> getAllSubject() {
-        List<Subject> subjectList = repositorySubject.findAll();
-        List<SubjectDto> subjectDtoList = subjectList.stream().map(SubjectMapper::toSubjectDto).toList();
+    public Page<SubjectDto> getAllSubject(int pageNumber,int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Page<Subject> subjectList = repositorySubject.findAll(pageable);
+        Page<SubjectDto> subjectDtoList = subjectList.map(SubjectMapper::toSubjectDto);
         return subjectDtoList;
     }
 

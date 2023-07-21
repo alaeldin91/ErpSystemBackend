@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +18,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/auth/admin/schoolGrade")
+@RequestMapping("api/v1/auth/schoolgrade")
 public class SchoolGradeController {
     Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private  final SchoolGradeServiceImpl schoolGradeService;
 
-    @GetMapping("/getallschoolGrade")
-    public ResponseEntity <List<SchoolGradeDto>> getAllGradeSchool(){
-        List<SchoolGradeDto> schoolGradeList = schoolGradeService.getAllSchoolGradeService();
+    @GetMapping(value = "/getallschoolGrade",params = {"page", "size"})
+    public ResponseEntity <Page<SchoolGradeDto>> getAllGradeSchool(@RequestParam("page") int page,@RequestParam("size") int size ){
+        Page<SchoolGradeDto> schoolGradeList = schoolGradeService.getAllSchoolGradeService(page, size);
         return new ResponseEntity<>(schoolGradeList, HttpStatus.OK);
 
     }

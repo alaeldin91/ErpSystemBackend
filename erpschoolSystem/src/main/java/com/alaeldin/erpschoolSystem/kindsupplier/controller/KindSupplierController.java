@@ -2,9 +2,8 @@ package com.alaeldin.erpschoolSystem.kindsupplier.controller;
 
 import com.alaeldin.erpschoolSystem.kindsupplier.dto.KindSupplierDto;
 import com.alaeldin.erpschoolSystem.kindsupplier.serviceImpl.KindSupplierServiceImpl;
-import com.alaeldin.erpschoolSystem.supplier.dto.SupplierDto;
-import com.alaeldin.erpschoolSystem.supplier.entity.Supplier;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,21 +11,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/auth/admin/kindsupplier")
+@RequestMapping("api/v1/auth/kindsupplier")
 @RequiredArgsConstructor
 public class KindSupplierController {
     private final KindSupplierServiceImpl kindSupplierService;
 
     @PostMapping
     public ResponseEntity<KindSupplierDto> saveKindSupplier(@RequestBody KindSupplierDto kindSupplierDto){
+
         KindSupplierDto kindSaveSupplierDto = kindSupplierService.saveKindSupplier(kindSupplierDto);
         return new ResponseEntity<>(kindSaveSupplierDto, HttpStatus.OK);
     }
-@GetMapping("/getallkinds")
-    public ResponseEntity<List<KindSupplierDto>> getAllSuppliers(){
-       List<KindSupplierDto> kindSupplierDtoList= kindSupplierService.getSupplierKinds();
+@GetMapping(value = "/getallkinds",params = {"pageNumber","pageSize"})
+    public ResponseEntity<Page<KindSupplierDto>> getAllSuppliers(@RequestParam("pageNumber")
+                                                                 int pageNumber, @RequestParam("pageSize") int pageSize){
+       Page<KindSupplierDto> kindSupplierDtoList= kindSupplierService
+               .getSupplierKinds(pageNumber,pageSize);
        return new ResponseEntity<>(kindSupplierDtoList,HttpStatus.OK);
-}
+    }
+
+    @GetMapping(value = "getsupplierlist")
+    public ResponseEntity<List<KindSupplierDto>> getSupplierList(){
+         List<KindSupplierDto> supplierDtoList = kindSupplierService.getSupplierList();
+         return  new ResponseEntity<>(supplierDtoList,HttpStatus.OK);
+    }
 
 @GetMapping("{id}")
       public ResponseEntity<KindSupplierDto> getKindSupplierById(@PathVariable("id") long id){

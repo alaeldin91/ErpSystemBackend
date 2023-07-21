@@ -4,6 +4,10 @@ import com.alaeldin.erpschoolSystem.classroom.dto.ClassRoomDto;
 import com.alaeldin.erpschoolSystem.classroom.entity.ClassRoom;
 import com.alaeldin.erpschoolSystem.classroom.mapper.ClassMapper;
 import com.alaeldin.erpschoolSystem.classroom.serviceimpl.ClassRoomServiceImpl;
+import com.alaeldin.erpschoolSystem.country.country.Service.CountryService;
+import com.alaeldin.erpschoolSystem.country.country.entity.Country;
+import com.alaeldin.erpschoolSystem.country.town.entity.City;
+import com.alaeldin.erpschoolSystem.country.town.service.impl.TownServiceImpl;
 import com.alaeldin.erpschoolSystem.schoolgrade.dto.SchoolGradeDto;
 import com.alaeldin.erpschoolSystem.schoolgrade.entity.SchoolGrade;
 import com.alaeldin.erpschoolSystem.schoolgrade.mapper.MapperSchoolGrade;
@@ -11,6 +15,7 @@ import com.alaeldin.erpschoolSystem.schoolgrade.servieImpl.SchoolGradeServiceImp
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.io.IOException;
+import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -21,13 +26,51 @@ import java.io.InputStream;
 import java.util.List;
 
 @SpringBootApplication
-
 public class ErpschoolSystemApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ErpschoolSystemApplication.class, args);
 	}
 
+	@Bean
+	CommandLineRunner runnerCountry(CountryService countryServiceImpl){
+		org.apache.logging.log4j.Logger logger = LogManager.getLogger(ErpschoolSystemApplication.class);
+		return 	args-> {
+			ObjectMapper objectMapper = new ObjectMapper();
+			TypeReference<List<Country>> typeReference = new TypeReference<>() {};
+			InputStream inputStream = TypeReference.class.getResourceAsStream("/fixture/countries.json");
+			try {
+				List<Country> countries = objectMapper.readValue(inputStream, typeReference);
+				countryServiceImpl.listCountryDao(countries);
+				System.out.println("Countries Saved");
+
+
+			} catch (java.io.IOException e) {
+				System.out.println("Unable to save Countries: " + e.getMessage());
+			}
+		};
+	}
+	@Bean
+	CommandLineRunner runnerTown( TownServiceImpl townService){
+		org.apache.logging.log4j.Logger logger = LogManager.getLogger(ErpschoolSystemApplication.class);
+
+		return 	args-> {
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			TypeReference<List<City>> typeReference = new TypeReference<>(){};
+			InputStream inputStream = TypeReference.class.getResourceAsStream("/fixture/cities.json");
+			try {
+				List<City> cities =  objectMapper.readValue(inputStream, typeReference);
+				logger.info(cities);
+				townService.saveAllCities(cities);
+
+				System.out.println("Cities Saved");
+
+			} catch (java.io.IOException e) {
+				System.out.println("Unable to save Cities: " + e.getMessage());
+			}
+		};
+	}
 
 	/**Runner Class Room **/
 

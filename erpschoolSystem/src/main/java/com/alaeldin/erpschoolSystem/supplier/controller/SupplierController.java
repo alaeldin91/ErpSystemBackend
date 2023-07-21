@@ -1,17 +1,19 @@
 package com.alaeldin.erpschoolSystem.supplier.controller;
 
 import com.alaeldin.erpschoolSystem.supplier.dto.SupplierDto;
-import com.alaeldin.erpschoolSystem.supplier.entity.Supplier;
 import com.alaeldin.erpschoolSystem.supplier.servicelmpl.SupplierServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/auth/admin/supplier")
+@RequestMapping("api/v1/auth/supplier")
+@Validated
 @RequiredArgsConstructor
 public class SupplierController {
     private final SupplierServiceImpl supplierService;
@@ -21,9 +23,9 @@ public class SupplierController {
         return new ResponseEntity<>(saveSupplier, HttpStatus.OK);
     }
 
-    @GetMapping("getAllsupplier")
-    public ResponseEntity<List<SupplierDto>> getAllSupplier(){
-        List<SupplierDto> supplier = supplierService.getAllSupplier();
+    @GetMapping(value = "getAllsupplier",params = {"pageNumber","pageSize"})
+    public ResponseEntity<Page<SupplierDto>> getAllSupplier(int pageNumber,int pageSize){
+        Page<SupplierDto> supplier = supplierService.getAllSupplier(pageNumber,pageSize);
         return new ResponseEntity<>(supplier,HttpStatus.OK);
     }
 

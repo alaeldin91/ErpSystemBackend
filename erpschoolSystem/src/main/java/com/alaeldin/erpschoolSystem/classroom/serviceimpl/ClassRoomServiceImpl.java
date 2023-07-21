@@ -7,6 +7,9 @@ import com.alaeldin.erpschoolSystem.classroom.repository.ClassRoomRepository;
 import com.alaeldin.erpschoolSystem.classroom.service.ClassRoomService;
 import com.alaeldin.erpschoolSystem.exception.resourcenotfound.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,9 +26,11 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
-    public List<ClassRoomDto> getClassRoom() {
-        List<ClassRoom> classRoomList = classRoomRepository.findAll();
-        return classRoomList.stream().map(ClassMapper::toClassRoomDto).toList();
+    public Page<ClassRoomDto> getClassRoom(int pageNumber,int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Page<ClassRoom> classRoomPage = classRoomRepository.findAll(pageable);
+        Page<ClassRoomDto>classRoomDto = classRoomPage.map(classRoom -> ClassMapper.toClassRoomDto(classRoom));;
+        return classRoomDto;
     }
 
     @Override

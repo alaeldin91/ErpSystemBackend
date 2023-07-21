@@ -1,6 +1,7 @@
 package com.alaeldin.erpschoolSystem.supplier.service;
 
 import com.alaeldin.erpschoolSystem.supplier.dto.SupplierDto;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,7 +10,8 @@ public interface SupplierService {
     /** Save Supplier  **/
     SupplierDto saveSupplier(SupplierDto supplierDto);
     /** get All Supplier **/
-    List<SupplierDto> getAllSupplier();
+    Page<SupplierDto> getAllSupplier(int pageNumber,int pageSize);
+
     /** get Supplier By Id **/
     SupplierDto getSupplierById(long supplierId);
     /** get Supplier By Name **/

@@ -17,11 +17,10 @@ public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Nullable
+    @Column(nullable = false, unique = true)
     private String nameSupplier;
     @ManyToOne()
     @JoinColumn(name = "kind_supplier_id")
-    @Nullable
     private KindSupplier kindSupplier;
 
 }

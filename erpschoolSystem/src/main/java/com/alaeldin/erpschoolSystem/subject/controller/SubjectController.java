@@ -6,6 +6,7 @@ import com.alaeldin.erpschoolSystem.subject.entity.Subject;
 import com.alaeldin.erpschoolSystem.subject.serviceimpl.SubjectServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/auth/admin/subject")
+@RequestMapping("api/v1/auth/subject")
 @RequiredArgsConstructor
 public class SubjectController {
 private final SubjectServiceImpl subjectService;
@@ -24,9 +25,10 @@ private final SubjectServiceImpl subjectService;
     return new ResponseEntity<>(saveSubjectDto, HttpStatus.OK);
    }
 
-   @GetMapping("/getAllsubject")
-    public ResponseEntity<List<SubjectDto>> getAllSubject(){
-       List<SubjectDto> subjectList = subjectService.getAllSubject();
+   @GetMapping(value = "/getAllsubject",params = {"pageNumber","pageSize"})
+    public ResponseEntity<Page<SubjectDto>> getAllSubject(@RequestParam("pageNumber") int pageNumber
+           ,@RequestParam("pageSize")int pageSize){
+       Page<SubjectDto> subjectList = subjectService.getAllSubject(pageNumber,pageSize);
        return new ResponseEntity<>(subjectList,HttpStatus.OK);
 
    }

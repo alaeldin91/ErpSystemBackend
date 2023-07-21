@@ -1,5 +1,6 @@
 package com.alaeldin.erpschoolSystem.supplier.servicelmpl;
 
+import com.alaeldin.erpschoolSystem.exception.existdata.EmailAlreadyExistsException;
 import com.alaeldin.erpschoolSystem.exception.resourcenotfound.ResourceNotFoundException;
 import com.alaeldin.erpschoolSystem.supplier.dto.SupplierDto;
 import com.alaeldin.erpschoolSystem.supplier.entity.Supplier;
@@ -8,9 +9,13 @@ import com.alaeldin.erpschoolSystem.supplier.repository.SupplierRepository;
 import com.alaeldin.erpschoolSystem.supplier.service.SupplierService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,17 +23,23 @@ public class SupplierServiceImpl implements SupplierService {
     private SupplierRepository supplierRepository;
     @Override
     public SupplierDto saveSupplier(SupplierDto supplierDto) {
-        Supplier supplier = MapperSupplier.toMapSupplier(supplierDto);
-        Supplier saveSupplier = supplierRepository.save(supplier);
-        SupplierDto supplierSaveDto = MapperSupplier.toMapSupplierDto(saveSupplier);
-        return supplierSaveDto;
-    }
+        Optional<Supplier> presentSupplier = supplierRepository.findByNameSupplier(supplierDto.getNameSupplier());
+        if (presentSupplier.isPresent()) {
+            throw new EmailAlreadyExistsException("Your Supplier Name is Already Exist");
+        }
+            Supplier supplier = MapperSupplier.toMapSupplier(supplierDto);
+            Supplier saveSupplier = supplierRepository.save(supplier);
+            SupplierDto supplierSaveDto = MapperSupplier.toMapSupplierDto(saveSupplier);
+            return supplierSaveDto;
 
+
+    }
     @Override
-    public List<SupplierDto> getAllSupplier() {
-        List<Supplier> supplierList = supplierRepository.findAll();
-        List<SupplierDto> supplierDtoList = supplierList.stream().map(supplier ->
-                MapperSupplier.toMapSupplierDto(supplier)).toList();
+    public Page<SupplierDto> getAllSupplier(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Page<Supplier> supplierList = supplierRepository.findAll(pageable);
+        Page<SupplierDto> supplierDtoList = supplierList.map(supplier ->
+                MapperSupplier.toMapSupplierDto(supplier));
         return supplierDtoList;
     }
 

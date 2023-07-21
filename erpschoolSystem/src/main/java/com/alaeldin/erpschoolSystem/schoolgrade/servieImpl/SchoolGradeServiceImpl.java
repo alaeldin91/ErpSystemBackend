@@ -7,6 +7,9 @@ import com.alaeldin.erpschoolSystem.schoolgrade.mapper.MapperSchoolGrade;
 import com.alaeldin.erpschoolSystem.schoolgrade.repository.SchoolGradeRepository;
 import com.alaeldin.erpschoolSystem.schoolgrade.service.SchoolGradeService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +19,12 @@ import java.util.List;
 public class SchoolGradeServiceImpl implements SchoolGradeService {
     private SchoolGradeRepository schoolGradeRepository;
     @Override
-    public List<SchoolGradeDto> getAllSchoolGradeService() {
-        List<SchoolGrade> schoolGradeList = schoolGradeRepository.findAll();
+    public Page<SchoolGradeDto> getAllSchoolGradeService(int pageNumber,int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
 
-        return schoolGradeList.stream().map(MapperSchoolGrade::toSchoolGradeDto).toList();
+        Page<SchoolGrade> schoolGradeList = schoolGradeRepository.findAll(pageable);
+
+        return schoolGradeList.map(MapperSchoolGrade::toSchoolGradeDto);
     }
 
     @Override
