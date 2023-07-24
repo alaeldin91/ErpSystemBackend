@@ -6,8 +6,7 @@ import com.alaeldin.erpschoolSystem.country.town.dto.CityDto;
 import com.alaeldin.erpschoolSystem.country.town.entity.City;
 import com.alaeldin.erpschoolSystem.country.town.repository.RepositoryTown;
 import com.alaeldin.erpschoolSystem.country.town.service.TownService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.alaeldin.erpschoolSystem.exception.resourcenotfound.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,6 +62,25 @@ public class TownServiceImpl implements TownService {
                     .orElseThrow();
              return TownMapper.mapToCityDto(city);
     }
+
+    @Override
+    public void deleteCity(long id) {
+      City existTown = repositoryTown.findById(id).orElseThrow(()
+              ->new ResourceNotFoundException("town","id",(int) id));
+      repositoryTown.delete(existTown);
+    }
+
+    @Override
+    public CityDto updateCity(CityDto cityDto) {
+        City existCity = repositoryTown.findById(cityDto.getId()).orElseThrow(()->
+                new ResourceNotFoundException("town","id",(int)cityDto.getId()));
+          existCity.setId(cityDto.getId());
+          existCity.setName(cityDto.getName());
+          existCity.setCountry(cityDto.getCountry());
+         City townSave = repositoryTown.save(existCity);
+         return TownMapper.mapToCityDto(townSave) ;
+    }
+
 
 
 }

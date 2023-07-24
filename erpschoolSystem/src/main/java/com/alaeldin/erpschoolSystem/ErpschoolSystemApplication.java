@@ -4,10 +4,14 @@ import com.alaeldin.erpschoolSystem.classroom.dto.ClassRoomDto;
 import com.alaeldin.erpschoolSystem.classroom.entity.ClassRoom;
 import com.alaeldin.erpschoolSystem.classroom.mapper.ClassMapper;
 import com.alaeldin.erpschoolSystem.classroom.serviceimpl.ClassRoomServiceImpl;
-import com.alaeldin.erpschoolSystem.country.country.Service.CountryService;
+import com.alaeldin.erpschoolSystem.country.country.Service.CountryServiceImpl;
 import com.alaeldin.erpschoolSystem.country.country.entity.Country;
 import com.alaeldin.erpschoolSystem.country.town.entity.City;
 import com.alaeldin.erpschoolSystem.country.town.service.impl.TownServiceImpl;
+import com.alaeldin.erpschoolSystem.gender.dto.GenderDto;
+import com.alaeldin.erpschoolSystem.gender.entity.Gender;
+import com.alaeldin.erpschoolSystem.gender.mapper.GenderMapper;
+import com.alaeldin.erpschoolSystem.gender.servicelmpl.GenderServiceImpl;
 import com.alaeldin.erpschoolSystem.schoolgrade.dto.SchoolGradeDto;
 import com.alaeldin.erpschoolSystem.schoolgrade.entity.SchoolGrade;
 import com.alaeldin.erpschoolSystem.schoolgrade.mapper.MapperSchoolGrade;
@@ -33,7 +37,7 @@ public class ErpschoolSystemApplication {
 	}
 
 	@Bean
-	CommandLineRunner runnerCountry(CountryService countryServiceImpl){
+	CommandLineRunner runnerCountry(CountryServiceImpl countryServiceImpl){
 		org.apache.logging.log4j.Logger logger = LogManager.getLogger(ErpschoolSystemApplication.class);
 		return 	args-> {
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -47,6 +51,28 @@ public class ErpschoolSystemApplication {
 
 			} catch (java.io.IOException e) {
 				System.out.println("Unable to save Countries: " + e.getMessage());
+			}
+		};
+	}
+
+	@Bean
+	CommandLineRunner runnerGender(GenderServiceImpl genderService){
+		org.apache.logging.log4j.Logger logger = LogManager.getLogger(ErpschoolSystemApplication.class);
+		return args -> {
+			ObjectMapper objectMapper = new ObjectMapper();
+			TypeReference<List<Gender>> typeReference = new TypeReference<>() {};
+			InputStream inputStream = TypeReference.class.getResourceAsStream("/fixture/gender.json");
+			try {
+				List<Gender> genders = objectMapper.readValue(inputStream,typeReference);
+				List<GenderDto> genderDto = genders.stream().map(gender -> GenderMapper.toGenderDto(gender)).toList();
+				logger.info(genderDto);
+				genderService.saveAll(genderDto);
+				System.out.println("Gender Saved");
+
+			}
+			catch (IOException e){
+				System.out.println("Unable to save Gender: " + e.getMessage());
+
 			}
 		};
 	}

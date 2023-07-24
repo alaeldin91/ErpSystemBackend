@@ -9,10 +9,45 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface TownService {
-Iterable<City>saveAllCities(List<City> countryList);
-Page<CityDto> getAllTown(int pageNumber, int pageSize);
-List <CityDto> getCityByCountry(Long countryName);
-CityDto getCityByName(String cityName);
+    /**
+     * function Save All Cities
+     * @param countryList
+     * @return
+     */
+    Iterable<City>saveAllCities(List<City> countryList);
 
+    /**
+     *  function get All Town
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    Page<CityDto> getAllTown(int pageNumber, int pageSize);
 
+    /**
+     * function get City By Country
+     * @param countryName
+     * @return
+     */
+    List <CityDto> getCityByCountry(Long countryName);
+
+    /**
+     *  function get City By Name
+     * @param cityName
+     * @return
+     */
+    CityDto getCityByName(String cityName);
+
+    /**
+     * Function Delete By id
+     * @param id
+     */
+  void deleteCity(long id);
+
+    /**
+     * function Update City
+     * @param cityDto
+     * @return
+     */
+ CityDto updateCity(CityDto cityDto);
 }

@@ -32,4 +32,17 @@ private final TownServiceImpl townService;
              CityDto cityDto = townService.getCityByName(cityName);
              return new ResponseEntity<>(cityDto,HttpStatus.OK);
        }
+
+     @PostMapping("update/town/{id}")
+     public ResponseEntity<CityDto> updateTown(@PathVariable("id") long id,CityDto cityDto){
+        cityDto.setId(id);
+     CityDto updateCity = townService.updateCity(cityDto);
+     return new ResponseEntity<>(updateCity,HttpStatus.OK);
+   }
+
+   @GetMapping("delete/town/{id}")
+    public ResponseEntity<String> deleteTown(@PathVariable("id")long id){
+          townService.deleteCity(id);
+          return new ResponseEntity<>("Delete SuccessFully Town ",HttpStatus.OK);
+   }
 }
